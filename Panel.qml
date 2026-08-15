@@ -177,17 +177,18 @@ Panel {
     id: button
     anchors.fill: parent
     bar: root.bar
-    text: "󰔈"
+    // Font Awesome trophy, present in every Nerd Font Omarchy ships.
+    // Only drawn if the SVG mark fails to load.
+    text: "\uf091"
     tooltipText: Model.barTooltip(root.board, root.period)
-    opticalSize: Style.space(12)
     iconComponent: Component {
       Item {
         Image {
           id: barMark
           anchors.fill: parent
           source: root.trophyMark
-          sourceSize.width: width * 2
-          sourceSize.height: height * 2
+          sourceSize.width: Math.max(2, width) * 2
+          sourceSize.height: Math.max(2, height) * 2
           fillMode: Image.PreserveAspectFit
           smooth: true
           antialiasing: true
@@ -198,8 +199,18 @@ Panel {
         MultiEffect {
           anchors.fill: barMark
           source: barMark
+          visible: barMark.status === Image.Ready
           colorization: 1.0
           colorizationColor: button.active && button.useActiveColor ? button.activeColor : button.foreground
+        }
+
+        Text {
+          anchors.centerIn: parent
+          visible: barMark.status !== Image.Ready
+          text: button.text
+          color: button.active && button.useActiveColor ? button.activeColor : button.foreground
+          font.family: button.fontFamily
+          font.pixelSize: button.fontSize
         }
       }
     }
