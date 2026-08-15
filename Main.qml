@@ -114,7 +114,6 @@ Item {
   function updateCommand(kind) {
     var command = ["omarchy-agent-usage-update"]
     if (kind === "force") command.push("--force")
-    if (kind === "limits") command.push("--limits-only")
     var providers = settings && settings.providers ? settings.providers : {}
     for (var id in providers) {
       if (providers[id] && providers[id].enabled === false) command.push("--except", id)
@@ -133,7 +132,6 @@ Item {
 
   function refresh() { refreshAll(true) }
   function refreshAll(force) { runUpdate(force === true ? "force" : "normal") }
-  function refreshLimits() { runUpdate("limits") }
 
   function setting(name, fallback) {
     var value = settings ? settings[name] : undefined

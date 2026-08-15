@@ -13,7 +13,6 @@ Panel {
   manageIpc: false
 
   readonly property color foreground: bar ? bar.foreground : Color.foreground
-  readonly property color urgent: bar ? bar.urgent : Color.urgent
   readonly property color dim: Qt.darker(foreground, 1.55)
   readonly property color surface: Color.popups.background
   readonly property color track: Style.selectedFillFor(foreground, Color.accent)
@@ -45,7 +44,6 @@ Panel {
       if (standings[i].providerId === selectedRow.providerId) return i
     return 0
   }
-  readonly property var models: selectedRow ? Model.modelRows(selectedRow, 4) : []
   readonly property var weekChart: {
     var rev = usage.dataRevision
     return Model.weekSeries(standings, root.nowMs)
@@ -146,7 +144,6 @@ Panel {
     cursorActive = false
     nowMs = Date.now()
     if (panelFlick) panelFlick.contentY = 0
-    usage.refreshLimits()
     Qt.callLater(function() { keyCatcher.forceActiveFocus() })
   }
 
@@ -181,6 +178,10 @@ Panel {
     // Only drawn if the SVG mark fails to load.
     text: "\uf091"
     tooltipText: Model.barTooltip(root.board, root.period)
+    // Nerd-font neighbors (Agents, network, bluetooth) paint at iconFont
+    // on a larger iconCanvas. Fill that font box so the cup matches them
+    // instead of looking like a 16px tray portrait.
+    opticalSize: Style.bar.iconFont
     iconComponent: Component {
       Item {
         Image {
@@ -436,44 +437,6 @@ Panel {
             }
           }
 
-          PanelSeparator {
-            visible: modelSection.visible
-            foreground: root.foreground
-          }
-
-          Column {
-            id: modelSection
-            visible: root.models.length > 0
-            width: parent.width
-            spacing: Style.spacing.md
-
-            PanelSectionHeader {
-              width: parent.width
-              text: root.selectedRow ? root.selectedRow.providerName.toUpperCase() : "MODELS"
-              foreground: root.foreground
-              fontFamily: root.fontFamily
-            }
-
-            Repeater {
-              model: root.models
-
-              ModelRow {
-                required property var modelData
-                width: modelSection.width
-                row: modelData
-                share: modelData.total / Math.max(1, root.models[0].total)
-              }
-            }
-
-            Text {
-              visible: text !== ""
-              width: parent.width
-              text: Model.selectedSummary(root.selectedRow, root.period)
-              color: root.dim
-              font.family: root.fontFamily
-              font.pixelSize: Style.font.caption
-            }
-          }
         }
       }
     }
@@ -680,72 +643,6 @@ Panel {
     PanelToolTip {
       visible: dayHover.containsMouse && dayCol.day && dayCol.day.total > 0
       text: root.weekTooltip(dayCol.day)
-      fontFamily: root.fontFamily
-    }
-  }
-
-  component ModelRow: Item {
-    id: modelRow
-    property var row: null
-    property real share: 0
-
-    implicitHeight: modelName.implicitHeight + Style.spacing.lg
-
-    Rectangle {
-      anchors.fill: parent
-      radius: Style.cornerRadius
-      color: root.alpha(root.foreground, 0.05)
-    }
-
-    Rectangle {
-      anchors.left: parent.left
-      anchors.top: parent.top
-      anchors.bottom: parent.bottom
-      width: parent.width * root.clamp(modelRow.share, 0, 1)
-      radius: Style.cornerRadius
-      color: root.alpha(root.foreground, 0.14)
-
-      Behavior on width {
-        NumberAnimation { duration: 160; easing.type: Easing.OutCubic }
-      }
-    }
-
-    Text {
-      id: modelName
-      text: modelRow.row ? modelRow.row.name : ""
-      color: root.foreground
-      font.family: root.fontFamily
-      font.pixelSize: Style.font.bodySmall
-      elide: Text.ElideRight
-      anchors.left: parent.left
-      anchors.leftMargin: Style.space(8)
-      anchors.right: modelTokens.left
-      anchors.rightMargin: Style.space(8)
-      anchors.verticalCenter: parent.verticalCenter
-    }
-
-    Text {
-      id: modelTokens
-      text: modelRow.row ? Model.formatTokenCount(modelRow.row.total) : ""
-      color: root.dim
-      font.family: root.fontFamily
-      font.pixelSize: Style.font.bodySmall
-      font.bold: true
-      anchors.right: parent.right
-      anchors.rightMargin: Style.space(8)
-      anchors.verticalCenter: parent.verticalCenter
-    }
-
-    MouseArea {
-      id: modelHover
-      anchors.fill: parent
-      hoverEnabled: true
-      acceptedButtons: Qt.NoButton
-    }
-
-    PanelToolTip {
-      visible: modelHover.containsMouse
-      text: Model.modelTooltip(modelRow.row)
       fontFamily: root.fontFamily
     }
   }

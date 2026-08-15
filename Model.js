@@ -286,10 +286,8 @@ function friendlyModelName(id) {
 function heroMeta(board, period) {
   if (!board || !board.rows || board.rows.length === 0)
     return "No " + periodLabel(period).toLowerCase() + " usage yet"
-  var count = board.rows.length
-  var text = periodLabel(period) + " · " + formatTokenCount(board.total) + " tokens · "
-    + count + " agent" + (count === 1 ? "" : "s")
-  if (board.leader) text += " · " + board.leader.providerName + " leads"
+  var text = periodLabel(period) + " · " + formatTokenCount(board.total)
+  if (board.leader) text += " · " + board.leader.providerName
   return text
 }
 

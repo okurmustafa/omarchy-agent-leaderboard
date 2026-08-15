@@ -39,7 +39,7 @@ omarchy bar move mustafaokur.agent-leaderboard --section right
 - `R` or Enter: refresh
 - Tab: hand off to the neighboring bar panel
 
-The panel ranks the selected window, draws a stacked last-seven-days chart, and shows the selected agent's top models.
+The panel ranks the selected window and draws a last-seven-days chart. Per-model totals stay in the first-party Agents widget.
 
 Summon without the bar:
 

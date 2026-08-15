@@ -138,7 +138,7 @@ assertEqual(series.days[5].total, 10_611_954, "Friday is Codex-only")
 assertEqual(series.days[6].parts.length, 2, "Saturday has both agents")
 assertEqual(series.peak, 10_611_954, "peak is the busiest day")
 
-assertEqual(M.heroMeta(today, "today").indexOf("Claude Code leads") >= 0, true, "hero names the leader")
+assertEqual(M.heroMeta(today, "today"), "Today · 5.8M · Claude Code", "hero is short and names the leader")
 assertEqual(M.barTooltip(today, "today"), "Claude Code leads today · 5.2M tokens", "bar tooltip names the leader")
 assertEqual(M.selectedSummary(today.rows[0], "today"), "50 prompts · 1 session", "today summary uses today's counts")
 assertEqual(M.dayLabel("2026-08-15", true), "Today", "today's column is labeled Today")
