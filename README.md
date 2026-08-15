@@ -4,7 +4,7 @@ An Omarchy bar widget that ranks **token usage across every coding agent** on th
 
 It is a comparison board, not a per-subscription meter. The first-party Agents widget still owns limits, pace, and the model breakdown for one tool at a time. This panel answers a different question: *who is spending the tokens?*
 
-The board is display-only. It watches the usage records that `omarchy-agent-usage-update` writes to `~/.local/state/omarchy/agents/usage/` and ranks whatever appears there. Claude, Codex, and Fireworks ship with Omarchy and are enabled by default. Any other collector that writes the same record contract — Hermes, Grok, a future agent — shows up on the next refresh.
+The board is display-only. It watches the usage records that `omarchy-agent-usage-update` writes to `~/.local/state/omarchy/agents/usage/` and ranks whatever appears there. Claude, Codex, Fireworks, and the local Grok collector are enabled by default. Any other collector that writes the same record contract — Hermes, a future agent — shows up on the next refresh. The Grok mark is a stand-in until Omarchy ships one. The same files live in `~/.config/omarchy/agents/assets/` and in the cloned Agents plugin (`mustafaokur.agents`) so the first-party-style panel can show Grok too.
 
 ## Install
 
@@ -108,6 +108,7 @@ That deletes the plugin folder. It does **not** remove `~/.local/state/omarchy/a
 
 - Panel structure and the Claude / Codex / Fireworks marks follow Omarchy’s first-party Agents widget (MIT, David Heinemeier Hansson / Omarchy).
 - The Hermes mark is traced from the official Hermes Desktop icon (MIT, [Nous Research](https://github.com/NousResearch/hermes-agent)).
+- The Grok mark follows the current singularity-G brand path. Replace it with Omarchy’s official asset when that ships.
 - Ranking reads the same usage records that `omarchy-agent-usage-update` already writes.
 
 ## License

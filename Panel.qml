@@ -1,5 +1,6 @@
 import QtQuick
 import QtQuick.Controls
+import QtQuick.Effects
 import Quickshell.Io
 import qs.Commons
 import qs.Ui
@@ -17,6 +18,7 @@ Panel {
   readonly property color surface: Color.popups.background
   readonly property color track: Style.selectedFillFor(foreground, Color.accent)
   readonly property string fontFamily: bar ? bar.fontFamily : Style.font.family
+  readonly property url trophyMark: Qt.resolvedUrl("assets/trophy.svg")
 
   property string period: {
     var value = String(setting("period", "today"))
@@ -102,13 +104,14 @@ Panel {
     claude: true,
     codex: true,
     fireworks: true,
+    grok: true,
     hermes: true
   })
 
   function iconCandidatesFor(id, surfaceColor) {
     if (!id || !root.shippedMarks[id]) return []
     var candidates = []
-    if (id === "codex" && colorLuminance(surfaceColor || Color.background) >= 0.5)
+    if ((id === "codex" || id === "grok") && colorLuminance(surfaceColor || Color.background) >= 0.5)
       candidates.push(Qt.resolvedUrl("assets/" + id + "-light.svg"))
     candidates.push(Qt.resolvedUrl("assets/" + id + ".svg"))
     return candidates
@@ -118,8 +121,7 @@ Panel {
     if (id === "claude") return "#D97757"
     if (id === "fireworks") return "#FF6B22"
     if (id === "hermes") return "#C9A227"
-    if (id === "grok") return "#6B8AFF"
-    if (id === "codex") return root.foreground
+    if (id === "grok" || id === "codex") return root.foreground
     var palette = ["#7C9CFF", "#6BCB77", "#FFD93D", "#FF6B6B", "#C77DFF", "#4ECDC4"]
     return palette[Math.max(0, index) % palette.length]
   }
@@ -177,6 +179,30 @@ Panel {
     bar: root.bar
     text: "󰔈"
     tooltipText: Model.barTooltip(root.board, root.period)
+    opticalSize: Style.space(12)
+    iconComponent: Component {
+      Item {
+        Image {
+          id: barMark
+          anchors.fill: parent
+          source: root.trophyMark
+          sourceSize.width: width * 2
+          sourceSize.height: height * 2
+          fillMode: Image.PreserveAspectFit
+          smooth: true
+          antialiasing: true
+          visible: false
+          layer.enabled: true
+        }
+
+        MultiEffect {
+          anchors.fill: barMark
+          source: barMark
+          colorization: 1.0
+          colorizationColor: button.active && button.useActiveColor ? button.activeColor : button.foreground
+        }
+      }
+    }
     onPressed: function(buttonCode) {
       if (buttonCode === Qt.RightButton) root.launchAgent()
       else if (buttonCode === Qt.MiddleButton) root.cyclePeriod(1)
@@ -245,8 +271,28 @@ Panel {
                 width: Style.font.display
                 height: Style.font.display
 
+                Image {
+                  id: heroMark
+                  anchors.fill: parent
+                  source: root.trophyMark
+                  sourceSize.width: Style.font.display * 2
+                  sourceSize.height: Style.font.display * 2
+                  fillMode: Image.PreserveAspectFit
+                  visible: false
+                  layer.enabled: true
+                }
+
+                MultiEffect {
+                  anchors.fill: heroMark
+                  source: heroMark
+                  visible: heroMark.status === Image.Ready
+                  colorization: 1.0
+                  colorizationColor: root.foreground
+                }
+
                 Text {
                   anchors.centerIn: parent
+                  visible: heroMark.status !== Image.Ready
                   text: button.text
                   color: root.foreground
                   font.family: root.fontFamily

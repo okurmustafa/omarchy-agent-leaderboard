@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "id": "mustafaokur.agent-leaderboard",
   "name": "Agent Leaderboard",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "author": "Mustafa Okur",
   "license": "MIT",
   "description": "Ranks token usage across every Omarchy coding agent on this machine.",
@@ -22,7 +22,8 @@
       "providers": {
         "claude": { "enabled": true },
         "codex": { "enabled": true },
-        "fireworks": { "enabled": true }
+        "fireworks": { "enabled": true },
+        "grok": { "enabled": true }
       },
       "refreshIntervalSec": 900,
       "period": "today"
