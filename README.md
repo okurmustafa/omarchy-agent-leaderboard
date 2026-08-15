@@ -1,5 +1,9 @@
 # Agent Leaderboard
 
+<p align="center">
+  <img src="preview.png" alt="Agent Leaderboard: today standings and last seven days" width="420">
+</p>
+
 An Omarchy bar widget that ranks **token usage across every coding agent** on this machine.
 
 It is a comparison board, not a per-subscription meter. The first-party Agents widget still owns limits, pace, and the model breakdown for one tool at a time. This panel answers a different question: *who is spending the tokens?*
