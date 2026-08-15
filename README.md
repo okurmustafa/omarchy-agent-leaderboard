@@ -22,7 +22,7 @@ omarchy-shell shell rescanPlugins
 omarchy plugin enable mustafaokur.agent-leaderboard --section right
 ```
 
-The widget lands on the right of the bar, in the **AI** category next to Agents. Move it with:
+The widget lands on the right of the bar, in the **AI** category next to Agents. A panel preview is in `preview.png`. Move it with:
 
 ```sh
 omarchy bar move mustafaokur.agent-leaderboard --section right
