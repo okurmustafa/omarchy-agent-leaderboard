@@ -80,16 +80,7 @@ Item {
     dataRevision++
   }
 
-  readonly property string fireworksPiHelper: {
-    var url = String(Qt.resolvedUrl("collect-fireworks-pi.py"))
-    if (url.indexOf("file://") === 0) url = url.substring(7)
-    try { return decodeURIComponent(url) } catch (e) { return url }
-  }
-
-  Component.onCompleted: {
-    rescanAgents()
-    runFireworksPi()
-  }
+  Component.onCompleted: rescanAgents()
 
   property int refreshIntervalSec: Math.max(30, Number(setting("refreshIntervalSec", 900)))
   property string pendingUpdateKind: ""
@@ -106,7 +97,7 @@ Item {
     id: updateProcess
     running: false
     onExited: {
-      root.runFireworksPi()
+      root.rescanAgents()
       if (root.pendingUpdateKind !== "") {
         var kind = root.pendingUpdateKind
         root.pendingUpdateKind = ""
@@ -118,25 +109,6 @@ Item {
       waitForEnd: true
       onStreamFinished: if (text.trim() !== "") console.warn("agent-leaderboard", text.trim())
     }
-  }
-
-  Process {
-    id: fireworksPiProcess
-    running: false
-    onExited: root.rescanAgents()
-    stderr: StdioCollector {
-      waitForEnd: true
-      onStreamFinished: if (text.trim() !== "") console.warn("agent-leaderboard/fireworks-pi", text.trim())
-    }
-  }
-
-  function runFireworksPi() {
-    if (fireworksPiProcess.running || root.fireworksPiHelper === "") {
-      root.rescanAgents()
-      return
-    }
-    fireworksPiProcess.command = ["python3", root.fireworksPiHelper]
-    fireworksPiProcess.running = true
   }
 
   function updateCommand(kind) {
