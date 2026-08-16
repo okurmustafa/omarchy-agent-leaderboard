@@ -26,6 +26,12 @@ omarchy-shell shell rescanPlugins
 omarchy plugin enable mustafaokur.agent-leaderboard --section right
 ```
 
+Update an existing install with:
+
+```sh
+omarchy plugin update mustafaokur.agent-leaderboard
+```
+
 The widget lands on the right of the bar, in the **AI** category next to Agents. A panel preview is in `preview.png`. Move it with:
 
 ```sh
@@ -64,7 +70,9 @@ Each usage record already carries the numbers the first-party collectors publish
 
 Agents with no tokens in the selected window are omitted from that board. An agent that has never recorded usage does not appear at all. The bar icon itself stays hidden until at least one enabled agent has usage.
 
-Claude, Codex, and Fireworks are refreshed through `omarchy-agent-usage-update`. Other records in the usage directory are read as-is. If the official Fireworks collector is blocked by Cloudflare (no User-Agent), this plugin reruns that same collector with a browser User-Agent and writes the record.
+Claude, Codex, and Fireworks are refreshed through `omarchy-agent-usage-update`. Other records in the usage directory are read as-is.
+
+**Fireworks:** Omarchy's official collector asks the Fireworks billing API. Console/OpenCode keys work, but Cloudflare blocks the request because the collector sends no User-Agent and then reports a fake "cannot read billing" error. This plugin reruns that same official collector with a User-Agent (`collect-fireworks.py`) and writes `fireworks.json`. Sign in to Fireworks in OpenCode, or set `FIREWORKS_API_KEY` / `firectl set-api-key`.
 
 ## Configure
 
