@@ -78,7 +78,7 @@ def main() -> int:
     existing = json.loads(path.read_text(encoding="utf-8"))
   except Exception:
     existing = {}
-  if isinstance(existing, dict) and usable(existing) and existing.get("source") != "cloudflare-ua":
+  if isinstance(existing, dict) and usable(existing):
     return 0
 
   patch_user_agent()
