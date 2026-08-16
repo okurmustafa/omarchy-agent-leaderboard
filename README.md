@@ -64,7 +64,7 @@ Each usage record already carries the numbers the first-party collectors publish
 
 Agents with no tokens in the selected window are omitted from that board. An agent that has never recorded usage does not appear at all. The bar icon itself stays hidden until at least one enabled agent has usage.
 
-Claude, Codex, and Fireworks are refreshed through `omarchy-agent-usage-update`. Other records in the usage directory are read as-is.
+Claude, Codex, and Fireworks are refreshed through `omarchy-agent-usage-update`. Other records in the usage directory are read as-is. If the official Fireworks collector is blocked by Cloudflare (no User-Agent), this plugin reruns that same collector with a browser User-Agent and writes the record.
 
 ## Configure
 
